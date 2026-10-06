@@ -8,15 +8,18 @@ import type { GameState, InputLog } from '../engine';
 
 export interface Session {
   gameOverSent: boolean;
+  /** Set by any QA mutator; a tainted game is never submitted remotely (overview §9.7). */
+  tainted: boolean;
 }
 
 export function createSession(): Session {
-  return { gameOverSent: false };
+  return { gameOverSent: false, tainted: false };
 }
 
 /** Called when a `startEngine` effect creates a new game. */
 export function resetForNewGame(session: Session): void {
   session.gameOverSent = false;
+  session.tainted = false;
 }
 
 /** True exactly once per game: the first call that sees `phase === 'gameOver'` (and marks the session). */

@@ -1,37 +1,111 @@
+/* KIRO-MAN cabinet page: a black bezel, the integer-scaled pixel canvas, the CRT overlay and the legend. */
 html,
 body {
   margin: 0;
-  height: 100%;
+  min-height: 100%;
   background: #000000;
   color: #c2c3c7;
   font-family: ui-monospace, Menlo, Consolas, monospace;
 }
 
 #cabinet {
-  min-height: 100%;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
 }
 
 #screen {
   position: relative;
   line-height: 0;
+  background: #000000;
 }
 
 #game {
   display: block;
+  width: 320px;
+  height: 240px;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
   background: #000000;
 }
 
+/* CRT overlay: scanlines (2 px period), a vignette, and a gentle flicker. Never intercepts input. */
+#crt {
+  position: absolute;
+  inset: 0;
+  width: 320px;
+  height: 240px;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 1px, rgba(0, 0, 0, 0.25) 1px, rgba(0, 0, 0, 0.25) 2px),
+    radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.55) 100%);
+  box-shadow: inset 0 0 40px rgba(144, 70, 255, 0.12);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  #crt {
+    animation: crt-flicker 0.15s infinite alternate;
+  }
+
+  #crt.crt-roll {
+    animation:
+      crt-flicker 0.15s infinite alternate,
+      crt-roll 0.35s ease-out 1;
+  }
+}
+
+@keyframes crt-flicker {
+  from {
+    opacity: 0.94;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes crt-roll {
+  from {
+    box-shadow: inset 0 -240px 60px rgba(255, 241, 232, 0.08);
+  }
+  to {
+    box-shadow: inset 0 0 40px rgba(144, 70, 255, 0.12);
+  }
+}
+
 #controls {
-  margin: 0;
+  margin: 10px 0 16px;
   font-size: 14px;
   text-align: center;
+}
+
+#controls dl {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 18px;
+  margin: 0;
+}
+
+#controls dt {
+  display: inline;
+  color: #ffec27;
+}
+
+#controls dt::after {
+  content: ': ';
+}
+
+#controls dd {
+  display: inline;
+  margin: 0;
+}
+
+.fatal {
+  color: #ff004d;
+  font-size: 18px;
+  padding: 24px;
 }
 
 .visually-hidden {

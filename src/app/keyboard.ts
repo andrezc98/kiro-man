@@ -34,6 +34,46 @@ export function directionForKey(key: string): Dir | null {
   return ARROW_DIRS[key] ?? (key.length === 1 ? (WASD_DIRS[key.toLowerCase()] ?? null) : null);
 }
 
+/**
+ * Held-direction stack (AP-6.3): keydown pushes, keyup removes, and the current direction is the most
+ * recently pressed key that is still held (0 when none). Keys are identified case-insensitively so a
+ * Shift change between keydown and keyup still releases the key.
+ */
+export interface DirStack {
+  press(key: string): boolean;
+  release(key: string): void;
+  clear(): void;
+  current(): Dir;
+}
+
+function keyId(key: string): string {
+  return key.length === 1 ? key.toLowerCase() : key;
+}
+
+export function createDirStack(): DirStack {
+  let held: { id: string; dir: Dir }[] = [];
+  return {
+    press(key) {
+      const dir = directionForKey(key);
+      if (dir === null) return false;
+      const id = keyId(key);
+      held = held.filter((h) => h.id !== id);
+      held.push({ id, dir });
+      return true;
+    },
+    release(key) {
+      const id = keyId(key);
+      held = held.filter((h) => h.id !== id);
+    },
+    clear() {
+      held = [];
+    },
+    current() {
+      return held.length === 0 ? 0 : (held[held.length - 1] as { dir: Dir }).dir;
+    },
+  };
+}
+
 export function mapKey(screen: Screen, key: string): AppAction | null {
   if (screen === 'initials') {
     if (LETTER_RE.test(key)) return { type: 'initialsKey', key: { char: key } };

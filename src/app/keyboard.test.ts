@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { Screen } from '../arcade/cabinet';
-import { directionForKey, mapKey } from './keyboard';
+import { createDirStack, directionForKey, mapKey } from './keyboard';
 
 const OTHER_SCREENS: Screen[] = ['attract', 'playing', 'incident', 'highscores'];
 const ALL_SCREENS: Screen[] = [...OTHER_SCREENS, 'initials'];
@@ -97,5 +97,50 @@ describe('directionForKey', () => {
     expect(directionForKey('W')).toBe(1);
     expect(directionForKey('x')).toBeNull();
     expect(directionForKey('Arrow')).toBeNull();
+  });
+});
+describe('held-direction stack', () => {
+  it('is 0 with nothing held and follows the most recent press', () => {
+    const s = createDirStack();
+    expect(s.current()).toBe(0);
+    expect(s.press('ArrowLeft')).toBe(true);
+    expect(s.current()).toBe(4);
+    s.press('ArrowUp');
+    expect(s.current()).toBe(1);
+  });
+  it('two keys held, the top released: falls back to the other key', () => {
+    const s = createDirStack();
+    s.press('ArrowRight');
+    s.press('ArrowDown');
+    s.release('ArrowDown');
+    expect(s.current()).toBe(2);
+    s.release('ArrowRight');
+    expect(s.current()).toBe(0);
+  });
+  it('releasing a lower key keeps the top; re-pressing moves a key to the top', () => {
+    const s = createDirStack();
+    s.press('a');
+    s.press('w');
+    s.release('a');
+    expect(s.current()).toBe(1);
+    s.press('d');
+    s.press('w');
+    expect(s.current()).toBe(1);
+    s.release('w');
+    expect(s.current()).toBe(2);
+  });
+  it('matches keys case-insensitively (Shift changed between keydown and keyup)', () => {
+    const s = createDirStack();
+    s.press('w');
+    s.release('W');
+    expect(s.current()).toBe(0);
+  });
+  it('ignores non-direction keys and clears on demand', () => {
+    const s = createDirStack();
+    expect(s.press('x')).toBe(false);
+    expect(s.current()).toBe(0);
+    s.press('ArrowLeft');
+    s.clear();
+    expect(s.current()).toBe(0);
   });
 });

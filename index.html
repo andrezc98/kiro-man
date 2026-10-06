@@ -3,18 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="KIRO-MAN: Outage in the Data Center, a retro arcade maze chase with AWS-service power-ups." />
     <link rel="icon" href="data:," />
     <title>KIRO-MAN: Outage in the Data Center</title>
-    <link rel="stylesheet" href="/src/styles.css" />
   </head>
   <body>
     <main id="cabinet">
+      <h1 class="visually-hidden">KIRO-MAN: Outage in the Data Center</h1>
       <div id="screen">
         <canvas id="game" width="320" height="240" role="img" aria-label="KIRO-MAN arcade screen"></canvas>
         <div id="crt" aria-hidden="true"></div>
       </div>
-      <p id="controls">Coin: C or 5 · Start: Enter · Move: Arrow keys or WASD · Pause: P · Mute: M</p>
+      <section id="controls" aria-label="Controls">
+        <dl>
+          <div><dt>Coin</dt><dd>C or 5</dd></div>
+          <div><dt>Start</dt><dd>Enter</dd></div>
+          <div><dt>Move</dt><dd>Arrow keys or WASD</dd></div>
+          <div><dt>Pause</dt><dd>P</dd></div>
+          <div><dt>Mute</dt><dd>M</dd></div>
+          <div><dt>Initials</dt><dd>Type A-Z or use the arrows, Enter to confirm</dd></div>
+        </dl>
+      </section>
       <div id="live" class="visually-hidden" aria-live="polite"></div>
     </main>
+    <script type="module" src="/src/app/main.ts"></script>
   </body>
 </html>

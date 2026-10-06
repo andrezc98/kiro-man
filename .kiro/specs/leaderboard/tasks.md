@@ -13,5 +13,5 @@
 - [ ] 11. `infra/test/stack.test.ts` assertions (throttle, billing, runtime, OAC, env, both routes, 1024 MB); `npm --prefix infra test`. _LB-8_
 - [ ] 12. Run `cd infra && npx cdk synth --quiet` with credentials unset; record the result. _AC-5_
 - [ ] 13. `scripts/cfn-lint.sh` → `docs/cfn-lint-report.txt`; then run the power's `validate_cloudformation_template` and `check_cloudformation_template_compliance` on `infra/cdk.out/KiroManStack.template.json` and save findings plus fixes/justifications to `docs/power-iac-validation.md`. _AC-6_
-- [ ] 14. Wire local and remote into the app (attract/highscores panels, submit after initials, status) and verify offline play. _LB-7_
+- [x] 14. Wire local and remote into the app (attract/highscores panels, submit after initials, status) and verify offline play. _LB-7_
 - [ ] 15. README security section (unauthenticated API + mitigations) and the hot-partition note. _LB-8.4_
