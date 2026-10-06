@@ -1,0 +1,18 @@
+# Tasks — game-engine
+
+- [ ] 1. Root scaffolding: `package.json` with exact pins (overview §4.2), `.npmrc` `save-exact=true`, `tsconfig.json` (strict, `noUncheckedIndexedAccess`, `module: ESNext`, `moduleResolution: Bundler`, `resolveJsonModule`, `verbatimModuleSyntax`, `target: ES2022`), `vitest.config.ts`, `src/test-support/pbt.ts` (`PBT_RUNS=200`), `tests/static/guard.test.ts` (S1 exactly as defined in overview §8: `git ls-files -co --exclude-standard` file list, split-literal TODO and banned-name patterns, per-scan scopes), confirm `public/config.json` is in `.gitignore`. _GE-1.3_
+- [ ] 2. `rng.ts` (pinned mulberry32) plus unit tests asserting the golden values for seeds 0 and 1, `nextInt` range, `pick([])` throws. _GE-1.2_
+- [ ] 3. `types.ts` (the binding core types in design.md), `constants.ts` (`difficulty(level)`, `ENEMY_ORDER`, `MAX_TICKS`), `input.ts` (recorder starts at `last = 0`, records changes only; `reverse(0) = 0`) plus unit tests. _GE-1.4, GE-4.7_
+- [ ] 4. `src/content/services.json` (CATALOG_ORDER schema) with load-time validation; `maze.ts` (`parseMaze`, `validateMaze`, `isPassable`, BFS helpers returning `Dir`) plus one unit test per `MazeError` kind. _GE-2.2, GE-2.3, GE-6.1_
+- [ ] 5. `levels.ts`: three original 40x28 layouts (HALL-A/B/C), authored with the level-designer agent. _GE-2.1, GE-2.5_
+- [ ] 6. PBT P2a and P2b in `maze.property.test.ts`. _GE-2.3_
+- [ ] 7. `movement.ts` (fixed-point advance, buffered turns, `dir 0` keeps `desired`, reversal before advance, leftover rule) plus edge-case unit tests. _GE-3_
+- [ ] 8. Enemies: `pathing.ts`, `latency.ts`, `throttle.ts`, `coldStart.ts` (decrement → toggle → decide), `outage.ts` (DIR_ORDER candidates, always one draw), `index.ts` (ENEMY_ORDER, row-major pen homes, release state, targets, `isDark` false in pen) plus a unit test per AI. _GE-4, GE-5.2b_
+- [ ] 9. `powerups.ts` (`tickPowerUps` first-in-step semantics, threshold skip rule, kind-then-slot draw, the five effects incl. single clone advancing in its spawn step, Shield re-pick, and the binding warp check with `tileChangedThisStep` and `warpLock`) plus unit tests per effect, the timer boundary test, and the Lambda + CloudFront leftover-progress warp test. _GE-6_
+- [ ] 10. `collision.ts` (`prevOcc` swap predicate, invuln skip, shield order), `scoring.ts`, `game.ts` (`createGame` initial state + `RangeError` on bad `startLives`, `events = []` first in every phase, `gameOver`-phase step = tick only, same-step phase transitions, binding step order, reset table, time limit with `gameOverReason`, `isDark`, `forceGameOver`) plus unit tests including the walled-off time-limit replay. _GE-1.6, GE-1.7, GE-5, GE-7, GE-8.0_
+- [ ] 11. `src/engine/test-fixtures.ts` (`P5_MAZE`, walled-off time-limit maze, warp maze) with a unit test that each passes `validateMaze`; then PBT P3 in `movement.property.test.ts` with the grant list and coverage counters, plus `movement.coverage.test.ts`. _GE-3.6, AC-13_
+- [ ] 12. PBT P5 in `powerups.property.test.ts` on `P5_MAZE` (T = first playing step, bounded R and window, dir 0 input). _GE-6.4_
+- [ ] 13. `src/shared/replay.ts` with the pinned loop from overview §5.9 (`replay`, `validateReplay`) plus unit tests (empty log, events at ticks ≥ final tick, timeout, the tick-107999 time-limit event case) and a golden regression test. _GE-8, AC-12_
+- [ ] 14. PBT P4 in `determinism.property.test.ts`. _GE-1, GE-8.2_
+- [ ] 15. Perf test: a 108000-tick replay finishes < 1.5 s locally (10 s hard timeout, measured value logged). _AC-8_
+- [ ] 16. Run `npm test` and `npm run typecheck`; all green, no TODOs.

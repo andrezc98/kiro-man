@@ -1,0 +1,18 @@
+{
+  "verdict": "CHANGES_REQUESTED",
+  "findings": [
+    {"id": 1, "severity": "MEDIUM", "title": "P5 re-pick oracle wrong when R > T+duration", "where": "§8 P5, game-engine P5", "fix": "isActive after step s iff s in [T,T+d-1] ∪ [R,R+d-1]."},
+    {"id": 2, "severity": "MEDIUM", "title": "P1b round trip never leaves incident (60-tick lockout)", "where": "§8 P1b, coin-credit P1b", "fix": "Only when playing: gameOver(score 0, qualifies false), 60x uiTick, confirm, confirm."},
+    {"id": 3, "severity": "MEDIUM", "title": "Shipped levels need not have X/U/W reachable from P", "where": "§5.3, GE-2.3, P2b, P7 core bound", "fix": "validateMaze requires U and W reachable from P (unreachable_tile error); P2b asserts exit reachable from spawn on shipped levels; agent prompt updated."},
+    {"id": 4, "severity": "MEDIUM", "title": "P3 coverage assertion over random runs can flake", "where": "§8 P3, GE AC-13", "fix": "Main P3 unseeded without coverage assertion; second fc.assert with pinned seed asserts counters; keep deterministic companion test."},
+    {"id": 5, "severity": "NIT", "title": "releaseIn = 0 release timing", "where": "§5.6", "fix": "Release when releaseIn === 0, else decrement and release on reaching 0 same step."},
+    {"id": 6, "severity": "NIT", "title": "applyPowerUp side effects unspecified", "where": "powerups.ts", "fix": "State whether it adds +50, servicesUsed++, powerUpPickup event."},
+    {"id": 7, "severity": "NIT", "title": "CC-8.2 submitRemote emission moment", "where": "CC-8.2", "fix": "Emitted on the confirm leaving incident."},
+    {"id": 8, "severity": "NIT", "title": "Clone eat tile unstated", "where": "§5.7", "fix": "Clone eats at occ(clone)."},
+    {"id": 9, "severity": "NIT", "title": "pick formula", "where": "rng.ts", "fix": "arr[nextInt(r, arr.length)]."},
+    {"id": 10, "severity": "NIT", "title": "Out-of-order requirement/AC numbering", "where": "CC-8, LB AC, AP AC", "fix": "Renumber sequentially."},
+    {"id": 11, "severity": "NIT", "title": "P7 core timeout tight at perf bound", "where": "P7 core", "fix": "120 s timeout or one handle call per run."},
+    {"id": 12, "severity": "NIT", "title": "Level-clear effect clear moment", "where": "§5.8, GE-6.10", "fix": "Clear active/clone/pickup at step (9) immediately."}
+  ],
+  "reviewDoc": "/Users/andreszeballoscarbajal/Documents/kiro-uni/kiro-man/.agents/tasks/design-review.md"
+}
