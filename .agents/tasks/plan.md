@@ -76,16 +76,16 @@ Commands (overview §4.4): `npm test`, `npm run test:unit`, `npm run test:pbt`, 
 
 ## Phase 2 — Pure cabinet, content, leaderboard logic
 
-- [ ] 12. `src/arcade/credits.ts` + tests + P1a; `src/arcade/initials.ts` + tests + P9 (CC tasks 1–4).
+- [x] 12. `src/arcade/credits.ts` + tests + P1a; `src/arcade/initials.ts` + tests + P9 (CC tasks 1–4).
       Verify: `npx vitest --run src/arcade` passes.
 
-- [ ] 13. `src/content/glyphs.ts`, `src/content/aws-facts.json` (≥ 2 facts per kind + ≥ 2 DynamoDB; verify each with the aws-docs MCP / AWS docs, record the exact doc URL in `sourceUrl`; replace any unverifiable draft), `src/content/facts.ts` (load-time validation, `pickFact`) + `facts.test.ts` + P10 (CC tasks 5–6).
+- [x] 13. `src/content/glyphs.ts`, `src/content/aws-facts.json` (≥ 2 facts per kind + ≥ 2 DynamoDB; verify each with the aws-docs MCP / AWS docs, record the exact doc URL in `sourceUrl`; replace any unverifiable draft), `src/content/facts.ts` (load-time validation, `pickFact`) + `facts.test.ts` + P10 (CC tasks 5–6).
       Verify: `npx vitest --run src/content` passes.
 
-- [ ] 14. `src/shared/result.ts`, `src/leaderboard/ranking.ts` + tests + P6; `src/leaderboard/localStore.ts` + tests; `src/shared/submission.ts` + tests + P8; P7 pure variant in `src/shared/replay.property.test.ts`; `src/leaderboard/remoteClient.ts` + tests; `src/app/config.ts` + tests (LB tasks 1–7).
+- [x] 14. `src/shared/result.ts`, `src/leaderboard/ranking.ts` + tests + P6; `src/leaderboard/localStore.ts` + tests; `src/shared/submission.ts` + tests + P8; P7 pure variant in `src/shared/replay.property.test.ts`; `src/leaderboard/remoteClient.ts` + tests; `src/app/config.ts` + tests (LB tasks 1–7).
       Verify: `npx vitest --run src/leaderboard src/shared src/app/config` passes.
 
-- [ ] 15. `src/arcade/cabinet.ts` reducer (all screens, timings, effects, `rootCause`, log cap, remoteStatus transitions, CC-8.2 emission per fix #7) + unit tests for every design edge case + P1b with the fixed round trip (fix #2) (CC tasks 7–8); `src/app/keyboard.ts` `mapKey` + tests (CC task 9); `src/app/session.ts` `checkGameOver` + tests (CC task 10, pure part).
+- [x] 15. `src/arcade/cabinet.ts` reducer (all screens, timings, effects, `rootCause`, log cap, remoteStatus transitions, CC-8.2 emission per fix #7) + unit tests for every design edge case + P1b with the fixed round trip (fix #2) (CC tasks 7–8); `src/app/keyboard.ts` `mapKey` + tests (CC task 9); `src/app/session.ts` `checkGameOver` + tests (CC task 10, pure part).
       Verify: `npm test` passes; `npm run typecheck` 0.
 
 ## Phase 3 — Presentation, audio, and the playable app
