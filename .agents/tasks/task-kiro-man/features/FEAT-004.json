@@ -1,0 +1,25 @@
+{
+  "id": "FEAT-004",
+  "type": "feat",
+  "description": "AWS CDK v2 backend, SYNTH ONLY: infra package, Lambda core that replays the shared engine to validate POST /scores (413 size cap, 400 schema, 422 mismatch/incomplete, 201 store), GET /scores top 10, DynamoDB on-demand, HTTP API with throttled $default stage and ANY /scores + ANY /{proxy+}, S3 + CloudFront OAC, stack assertions, cfn-lint and power IaC validation (leaderboard tasks 8-13). Plan.md items 19-20. Depends on FEAT-001 and FEAT-002 (engine, replay, submission, ranking); independent of FEAT-003 except that BucketDeployment is conditional on ../dist existing.",
+  "status": "pending",
+  "steps": [
+    "Plan item 19: infra/package.json (exact pins, scripts synth/typecheck/test with --dir test), infra/.npmrc, lockfile, infra/tsconfig.json (lib ES2022, types node, includes/excludes from overview 4.2), infra/cdk.json, infra/bin/kiro-man.ts; infra/lambda/core.ts + core.test.ts (every status incl. 405 PUT /scores, 404 /scores/, 413 plain+base64, 503) + core.property.test.ts (P7 core, default config, maxLength 20 logs, 120 s timeout), dynamo-store.ts, scores-handler.ts.",
+    "Plan item 20: infra/lib/kiro-man-stack.ts per overview 7.4, consulting the aws-infrastructure-as-code power (search_cdk_documentation, cdk_best_practices) and citing it in comments; infra/test/stack.test.ts (throttle, billing, runtime, OAC, env, both routes, 1024 MB, log group); synth with AWS credentials unset; scripts/cfn-lint.sh -> docs/cfn-lint-report.txt; run the power's validate_cloudformation_template and check_cloudformation_template_compliance on infra/cdk.out/KiroManStack.template.json and write docs/power-iac-validation.md with every finding fixed or justified (if the power tools are unavailable in this session, record that and rely on the cfn-lint CLI output).",
+    "Tick leaderboard tasks 8-13. Commit `feat(infra): CDK score-validation backend (synth only)`. NEVER run cdk deploy."
+  ],
+  "acceptance_criteria": [
+    "npm --prefix infra test and npm --prefix infra run typecheck exit 0",
+    "Synth with AWS credentials unset exits 0 and writes infra/cdk.out/KiroManStack.template.json",
+    "npm test (root) passes incl. infra/lambda core tests and P7 core",
+    "docs/cfn-lint-report.txt and docs/power-iac-validation.md exist with real output"
+  ],
+  "verification": [
+    "cd /Users/andreszeballoscarbajal/Documents/kiro-uni/kiro-man && npm --prefix infra install && npm --prefix infra test && npm --prefix infra run typecheck",
+    "env -u AWS_PROFILE -u AWS_ACCESS_KEY_ID -u AWS_SECRET_ACCESS_KEY -u AWS_SESSION_TOKEN npm run synth",
+    "npm run cfn-lint",
+    "npm test"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

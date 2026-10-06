@@ -1,0 +1,27 @@
+{
+  "id": "FEAT-005",
+  "type": "feat",
+  "description": "Kiro tooling, arcade-operator MCP server, packaged retro-arcade-power, Playwright screenshots, README and the final full verification run (overview section 9; arcade-presentation task 7; leaderboard task 15). Plan.md items 21-25. Depends on FEAT-001..FEAT-004.",
+  "status": "pending",
+  "steps": [
+    "Plan item 21: .kiro/steering/{game-engine,retro-style,aws-content,tech}.md (front-matter + content per overview 9.2); .kiro/hooks/{test-on-save,synth-on-infra-save,confirm-deploy,pbt-after-task}.json exactly per 9.3; scripts/confirm-deploy.mjs with exported decide() and fail-closed exit 2 + scripts/confirm-deploy.test.ts (spawnSync exit codes); .kiro/agents/{level-designer,cabinet-tech}.json exactly per 9.4 (level-designer prompt includes the U/W/X reachability sentence from fix #3); .kiro/settings/mcp.json per 9.5. Use ../lesson*.md and ../bonus*.md to confirm file formats.",
+    "Plan item 22: mcp/arcade-operator/{package.json,.npmrc,lockfile,tsconfig.json,src/tools.ts,src/index.ts,src/tools.test.ts,scripts/copy-to-power.mjs}; retro-arcade-power/{POWER.md,plugin.json,mcp.json,README.md,steering/{determinism-checklist,fixed-timestep-loop,replay-validation,pixel-art-canvas}.md,skills/deterministic-canvas-games/SKILL.md,skills/deterministic-canvas-games/references/*.md}; npm run build:mcp produces and commits retro-arcade-power/server/arcade-operator.mjs; stdio smoke lists get_leaderboard, validate_replay, list_power_ups.",
+    "Plan item 23: scripts/screenshots.mjs exactly per overview 9.7 (pinned seed 3735928559, fixed arrow script, rAF frame waits, fail on console.error/pageerror, kill preview, export MCP sample data); npx playwright install chromium if needed; npm run verify:browser; commit docs/screenshots/01-attract.png .. 08-highscores.png and mcp/arcade-operator/data/*.json; open each PNG to confirm content; run validate_replay on the sample and confirm valid true.",
+    "Plan item 24: attempt in-Kiro checks (hook trigger names A8, steering inclusion A9, local power install) and record outcomes honestly; write README.md per overview 2.11 (what, controls, run/test/build/synth/screenshots/cfn-lint, MCP + power setup, seven-feature Kiro map with file paths, security note + hot-partition note, exact disclaimer).",
+    "Plan item 25: final run of npm test, npm run typecheck, npm run build, npm run synth, npm run cfn-lint, npm run build:mcp, npm run verify:browser, npm --prefix infra test; ensure every checkbox in all four .kiro/specs/*/tasks.md is [x]. Commit `feat(kiro): tooling, MCP server, power, screenshots and README`."
+  ],
+  "acceptance_criteria": [
+    "All final-run commands exit 0",
+    "Eight PNGs in docs/screenshots/ show attract, credit, ready, gameplay, CloudWatch overlay + darkness, incident report, initials, highscores",
+    "MCP stdio server lists the three tools and validate_replay returns valid true for the exported sample",
+    "README covers every item in overview 2.11; no TODO tokens or banned names (static guard green)",
+    "No unchecked boxes remain in any spec tasks.md"
+  ],
+  "verification": [
+    "cd /Users/andreszeballoscarbajal/Documents/kiro-uni/kiro-man && npm test && npm run typecheck && npm run build",
+    "npm run build:mcp && npm run synth && npm run cfn-lint && npm --prefix infra test",
+    "npm run verify:browser"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

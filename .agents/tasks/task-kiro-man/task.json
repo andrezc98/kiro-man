@@ -1,0 +1,7 @@
+{
+  "task_id": "task-kiro-man",
+  "task_description": "Build KIRO-MAN: Outage in the Data Center, a deterministic retro 8-bit coin-op maze-chase browser game with AWS-themed enemies and power-ups, server-side replay validation (CDK v2, synth only), the arcade-operator MCP server, Kiro steering/hooks/agents/MCP config, the packaged retro-arcade-power, Playwright screenshots, and a complete README. Implements the approved specs in .kiro/specs/ after applying the 12 design-review pass-3 fixes. Full ordered plan: /Users/andreszeballoscarbajal/Documents/kiro-uni/kiro-man/.agents/tasks/plan.md",
+  "status": "pending",
+  "feature_order": ["FEAT-001", "FEAT-002", "FEAT-003", "FEAT-004", "FEAT-005"],
+  "blocked_reason": null
+}

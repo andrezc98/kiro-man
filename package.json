@@ -22,6 +22,7 @@
     "@aws-sdk/lib-dynamodb": "3.1146.0",
     "@modelcontextprotocol/sdk": "1.32.1",
     "@types/node": "22.20.5",
+    "esbuild": "0.28.2",
     "fast-check": "4.10.2",
     "playwright": "1.63.0",
     "typescript": "5.9.3",
