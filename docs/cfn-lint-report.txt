@@ -1,0 +1,17 @@
+cfn-lint report for infra/cdk.out/KiroManStack.template.json
+Generated: 2026-10-06T05:33:52Z
+Command: uvx cfn-lint==1.57.1 infra/cdk.out/KiroManStack.template.json
+Exit status: 4 (0 = clean; otherwise the sum of 2 = errors, 4 = warnings, 8 = informational)
+
+== cfn-lint ==
+W3005 'ScoresFnServiceRole0499CD21' dependency already enforced by a 'GetAtt' at 'Resources/ScoresFn81466544/Properties/Role'
+infra/cdk.out/KiroManStack.template.json:147:5
+
+W3005 'CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092' dependency already enforced by a 'GetAtt' at 'Resources/CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F/Properties/Role'
+infra/cdk.out/KiroManStack.template.json:591:5
+
+W3005 'CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265' dependency already enforced by a 'GetAtt' at 'Resources/CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536/Properties/Role'
+infra/cdk.out/KiroManStack.template.json:925:5
+
+== cfn-guard ==
+cfn-guard not installed

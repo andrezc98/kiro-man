@@ -78,7 +78,7 @@ describe('KiroManStack', () => {
 
   it('scores Lambda: nodejs22.x, 1024 MB, 15 s, env, explicit log group', () => {
     const tableId = Object.keys(template.findResources('AWS::DynamoDB::Table'))[0];
-    const logGroupId = Object.keys(template.findResources('AWS::Logs::LogGroup'))[0];
+    const logGroupId = Object.keys(template.findResources('AWS::Logs::LogGroup')).find((id) => id.startsWith('ScoresFnLogs'));
     template.hasResourceProperties('AWS::Lambda::Function', {
       Runtime: 'nodejs22.x',
       Handler: 'index.handler',

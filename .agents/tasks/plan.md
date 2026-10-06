@@ -101,10 +101,10 @@ Commands (overview §4.4): `npm test`, `npm run test:unit`, `npm run test:pbt`, 
 
 ## Phase 4 — Backend (CDK synth only)
 
-- [ ] 19. `infra/` package (`package.json`, `.npmrc`, lockfile, `tsconfig.json` per §4.2, `cdk.json`, `bin/kiro-man.ts`) (LB task 8); `infra/lambda/core.ts` + unit tests for every status code + core P7 (120 s timeout, fix #11), `dynamo-store.ts`, `scores-handler.ts` (LB task 9).
+- [x] 19. `infra/` package (`package.json`, `.npmrc`, lockfile, `tsconfig.json` per §4.2, `cdk.json`, `bin/kiro-man.ts`) (LB task 8); `infra/lambda/core.ts` + unit tests for every status code + core P7 (120 s timeout, fix #11), `dynamo-store.ts`, `scores-handler.ts` (LB task 9).
       Verify: `npm --prefix infra install`; `npx vitest --run infra/lambda` from root passes; `npm --prefix infra run typecheck` 0.
 
-- [ ] 20. `infra/lib/kiro-man-stack.ts` per overview §7.4 (DynamoDB on-demand, NodejsFunction w/ local esbuild, HTTP API with throttled `$default` stage, both routes, S3 + CloudFront OAC, conditional BucketDeployment, outputs), consulting the `aws-infrastructure-as-code` power and citing it in comments; `infra/test/stack.test.ts` (LB tasks 10–11); synth with credentials unset (LB task 12); `scripts/cfn-lint.sh` → `docs/cfn-lint-report.txt` and power validation → `docs/power-iac-validation.md` (LB task 13).
+- [x] 20. `infra/lib/kiro-man-stack.ts` per overview §7.4 (DynamoDB on-demand, NodejsFunction w/ local esbuild, HTTP API with throttled `$default` stage, both routes, S3 + CloudFront OAC, conditional BucketDeployment, outputs), consulting the `aws-infrastructure-as-code` power and citing it in comments; `infra/test/stack.test.ts` (LB tasks 10–11); synth with credentials unset (LB task 12); `scripts/cfn-lint.sh` → `docs/cfn-lint-report.txt` and power validation → `docs/power-iac-validation.md` (LB task 13).
       Verify: `npm --prefix infra test` passes; `env -u AWS_PROFILE -u AWS_ACCESS_KEY_ID -u AWS_SECRET_ACCESS_KEY npm run synth` exits 0; `npm run cfn-lint` writes the report.
 
 ## Phase 5 — Kiro tooling, MCP server, packaged power
