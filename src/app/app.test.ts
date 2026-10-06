@@ -272,3 +272,62 @@ describe('remoteStatusEvent', () => {
     expect(remoteStatusEvent(err({ kind: 'bad_response' }))).toEqual({ type: 'remoteStatus', status: 'offline' });
   });
 });
+
+describe('audio wiring', () => {
+  it('every key press resumes audio before it is handled, including ignored keys', () => {
+    const sfx = fakeSfx();
+    const resume = vi.spyOn(sfx, 'resume');
+    const { app } = setup({ sfx });
+    expect(resume).not.toHaveBeenCalled();
+    app.keyDown('c', false);
+    expect(resume).toHaveBeenCalledTimes(1);
+    app.keyDown('q', false); // unmapped
+    app.keyDown('Enter', true); // repeat
+    expect(resume).toHaveBeenCalledTimes(3);
+  });
+
+  it('plays soundsForEvents(events) for every engine step, plus the cabinet coin/start/denied effects', async () => {
+    const { soundsForEvents } = await import('../audio/sfx');
+    const expected: SoundName[] = [];
+    const { app, sfx } = setup({
+      hooks: { gameEvents: (_g, events) => expected.push(...soundsForEvents(events)) },
+    });
+    press(app, 'Enter'); // no credit
+    expect(sfx.played).toEqual(['denied']);
+    press(app, 'c');
+    press(app, 'Enter');
+    expect(sfx.played).toEqual(['denied', 'coin', 'start']);
+    app.keyDown('ArrowLeft', false);
+    for (let i = 0; i < 400; i++) app.step();
+    expect(expected).toContain('eat');
+    expect(sfx.played.slice(3)).toEqual(expected);
+  });
+
+  it('with the real createSfx, the first key press creates and resumes a suspended context and the coin is scheduled', async () => {
+    const { createSfx } = await import('../audio/sfx');
+    let resumes = 0;
+    let oscillatorStarts = 0;
+    let created = 0;
+    const param = { setValueAtTime: () => undefined, linearRampToValueAtTime: () => undefined };
+    const factory = () => {
+      created++;
+      return {
+        currentTime: 0,
+        destination: {},
+        state: 'suspended',
+        resume: () => {
+          resumes++;
+          return Promise.resolve();
+        },
+        createOscillator: () => ({ type: 'square', frequency: param, connect: () => undefined, start: () => void oscillatorStarts++, stop: () => undefined }),
+        createGain: () => ({ gain: param, connect: () => undefined }),
+      };
+    };
+    const { app } = setup({ sfx: createSfx(factory, () => undefined) });
+    expect(created).toBe(0);
+    press(app, 'c');
+    expect(created).toBe(1);
+    expect(resumes).toBeGreaterThanOrEqual(1);
+    expect(oscillatorStarts).toBe(2); // the two coin notes
+  });
+});

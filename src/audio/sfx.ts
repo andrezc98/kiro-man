@@ -1,6 +1,6 @@
 /**
  * WebAudio sound effects (AP-5). Each sound is a short table of square/triangle notes scheduled on the
- * context clock with a 0.08 gain envelope (no clicks), through one master gain. The context comes from
+ * context clock with a 0.18 gain envelope (no clicks), through one master gain. The context comes from
  * an injected factory, created on the first key press (`resume`), so autoplay rules are respected and
  * tests can pass a fake. With no context (unsupported or blocked) every call is a silent no-op.
  */
@@ -48,7 +48,7 @@ export interface AudioContextLike {
   createGain(): GainLike;
 }
 
-export const PEAK_GAIN = 0.08;
+export const PEAK_GAIN = 0.18;
 
 const sq = (freq: number, durMs: number, slideTo?: number): Note =>
   slideTo === undefined ? { freq, durMs, type: 'square' } : { freq, durMs, type: 'square', slideTo };

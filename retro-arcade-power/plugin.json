@@ -1,0 +1,11 @@
+{
+  "name": "retro-arcade-power",
+  "displayName": "Retro Arcade (Deterministic Canvas Games)",
+  "version": "1.0.0",
+  "description": "Build deterministic retro canvas games: seeded PRNG and integer simulation, fixed-timestep loops, server-side replay validation and crisp pixel art, plus an MCP server that validates replays, reads leaderboards and lists power-ups.",
+  "keywords": ["retro", "arcade", "8-bit", "pixel art", "canvas game", "deterministic", "replay", "leaderboard"],
+  "author": "Andres Zeballos",
+  "license": "MIT",
+  "skills": ["skills/deterministic-canvas-games"],
+  "mcp": "mcp.json"
+}

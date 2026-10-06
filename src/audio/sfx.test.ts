@@ -76,7 +76,7 @@ describe('sfx', () => {
     }
   });
 
-  it('schedules one oscillator per note, in order, with a gain envelope that never exceeds 0.08', () => {
+  it('schedules one oscillator per note, in order, with a gain envelope that never exceeds PEAK_GAIN (0.18)', () => {
     const a = fakeAudio();
     const sfx = createSfx(() => a.ctx);
     sfx.resume();
@@ -89,6 +89,57 @@ describe('sfx', () => {
       expect(o.started).toBeGreaterThanOrEqual(1);
     }
     expect(Math.max(...a.peakGains.filter((g) => g !== 1))).toBe(PEAK_GAIN);
+  });
+
+  it('routes every oscillator through its envelope into a master gain of 1 that is connected to destination', () => {
+    const destination = { name: 'destination' };
+    const edges = new Map<object, object[]>();
+    const gainValues = new Map<object, number[]>();
+    const oscillators: object[] = [];
+    const node = (extra: Record<string, unknown>): object => {
+      const n: Record<string, unknown> = { ...extra };
+      n.connect = (to: object) => {
+        edges.set(n, [...(edges.get(n) ?? []), to]);
+        return to;
+      };
+      return n;
+    };
+    const param = { setValueAtTime: () => undefined, linearRampToValueAtTime: () => undefined };
+    const ctx: AudioContextLike = {
+      currentTime: 0,
+      destination,
+      state: 'running',
+      resume: () => Promise.resolve(),
+      createOscillator() {
+        const o = node({ type: 'sine', frequency: param, start: () => undefined, stop: () => undefined });
+        oscillators.push(o);
+        return o as never;
+      },
+      createGain() {
+        const values: number[] = [];
+        const g = node({
+          gain: { setValueAtTime: (v: number) => values.push(v), linearRampToValueAtTime: (v: number) => values.push(v) },
+        });
+        gainValues.set(g, values);
+        return g as never;
+      },
+    };
+    const sfx = createSfx(() => ctx);
+    sfx.resume();
+    sfx.play('coin');
+    expect(oscillators).toHaveLength(2);
+    const masters = [...gainValues.keys()].filter((g) => edges.get(g)?.includes(destination));
+    expect(masters).toHaveLength(1);
+    const master = masters[0] as object;
+    expect(gainValues.get(master)).toEqual([1]);
+    for (const o of oscillators) {
+      const envs = edges.get(o) ?? [];
+      expect(envs).toHaveLength(1);
+      const env = envs[0] as object;
+      expect(edges.get(env)).toEqual([master]);
+      // The envelope rises to PEAK_GAIN, holds near it, and only then falls to 0.
+      expect(gainValues.get(env)).toEqual([0, PEAK_GAIN, PEAK_GAIN * 0.6, 0]);
+    }
   });
 
   it('alternates the two bug pitches', () => {

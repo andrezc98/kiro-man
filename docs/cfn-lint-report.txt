@@ -1,5 +1,5 @@
 cfn-lint report for infra/cdk.out/KiroManStack.template.json
-Generated: 2026-10-06T05:33:52Z
+Generated: 2026-10-06T06:05:28Z
 Command: uvx cfn-lint==1.57.1 infra/cdk.out/KiroManStack.template.json
 Exit status: 4 (0 = clean; otherwise the sum of 2 = errors, 4 = warnings, 8 = informational)
 

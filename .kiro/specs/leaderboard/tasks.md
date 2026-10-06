@@ -14,4 +14,4 @@
 - [x] 12. Run `cd infra && npx cdk synth --quiet` with credentials unset; record the result. _AC-5_
 - [x] 13. `scripts/cfn-lint.sh` → `docs/cfn-lint-report.txt`; then run the power's `validate_cloudformation_template` and `check_cloudformation_template_compliance` on `infra/cdk.out/KiroManStack.template.json` and save findings plus fixes/justifications to `docs/power-iac-validation.md`. _AC-6_
 - [x] 14. Wire local and remote into the app (attract/highscores panels, submit after initials, status) and verify offline play. _LB-7_
-- [ ] 15. README security section (unauthenticated API + mitigations) and the hot-partition note. _LB-8.4_
+- [x] 15. README security section (unauthenticated API + mitigations) and the hot-partition note. _LB-8.4_

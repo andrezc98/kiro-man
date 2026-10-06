@@ -1,0 +1,1 @@
+{"version":"v1","hooks":[{"name":"CDK synth on infra save","trigger":"PostFileSave","matcher":"infra/.*\\.ts$","action":{"type":"command","command":"cd infra && npx cdk synth --quiet"}}]}

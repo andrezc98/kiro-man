@@ -1,0 +1,1 @@
+{"version":"v1","hooks":[{"name":"Property tests after task","trigger":"PostTaskExec","matcher":".*","action":{"type":"command","command":"npm run test:pbt"}}]}

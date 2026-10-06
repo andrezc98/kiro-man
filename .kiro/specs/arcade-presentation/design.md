@@ -18,7 +18,7 @@ Everything in requirements.md is required. Polish is judged on the screenshots a
 
 **CRT.** A `#crt` div after the canvas uses `pointer-events:none`, a `repeating-linear-gradient` scanline (2 px period, rgba(0,0,0,.25)), a radial vignette, and a 0.15 s opacity flicker keyframe guarded by `@media (prefers-reduced-motion: no-preference)`.
 
-**Audio (`src/audio/sfx.ts`).** `createSfx(factory: () => AudioContext | null)`. Each SFX is a short table of `{freq, durMs, type}` notes scheduled on `ctx.currentTime`, with a gain envelope at 0.08 to avoid clicks. Mute is a boolean. One master gain node.
+**Audio (`src/audio/sfx.ts`).** `createSfx(factory: () => AudioContext | null)`. Each SFX is a short table of `{freq, durMs, type}` notes scheduled on `ctx.currentTime`, with a gain envelope peaking at 0.18 (raised from 0.08 after live testing found the SFX too quiet) that ramps in and out to avoid clicks. Mute is a boolean. One master gain node.
 
 **Screens.** One draw function per cabinet screen, in `src/render/screens/*.ts`. The incident report word-wraps facts to 36 characters per line with a pure `wrapText` (unit tested).
 

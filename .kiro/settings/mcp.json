@@ -1,0 +1,5 @@
+{ "mcpServers": {
+  "aws-docs": { "command": "uvx", "args": ["awslabs.aws-documentation-mcp-server@1.2.2"],
+                "env": { "FASTMCP_LOG_LEVEL": "ERROR", "AWS_DOCUMENTATION_PARTITION": "aws" }, "disabled": false },
+  "arcade-operator": { "command": "node", "args": ["mcp/arcade-operator/dist/index.js"],
+                "env": { "KIROMAN_API_URL": "" }, "disabled": false } } }

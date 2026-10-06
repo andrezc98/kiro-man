@@ -1,0 +1,1 @@
+{"mcpServers":{"arcade-operator":{"command":"node","args":["${ABSOLUTE_PATH_TO}/retro-arcade-power/server/arcade-operator.mjs"],"env":{"KIROMAN_API_URL":"","KIROMAN_LOCAL_SCORES":""},"disabled":false}}}

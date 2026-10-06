@@ -1,0 +1,1 @@
+{"version":"v1","hooks":[{"name":"Run tests on source save","trigger":"PostFileSave","matcher":"src/.*\\.ts$","action":{"type":"command","command":"npx vitest --run"}}]}

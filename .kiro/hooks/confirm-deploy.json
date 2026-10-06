@@ -1,0 +1,1 @@
+{"version":"v1","hooks":[{"name":"Confirm before cdk deploy","trigger":"PreToolUse","matcher":"execute_bash|shell","action":{"type":"command","command":"node scripts/confirm-deploy.mjs"}}]}
