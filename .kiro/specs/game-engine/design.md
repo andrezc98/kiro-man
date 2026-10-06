@@ -57,7 +57,7 @@ type PowerKind = 'lambda' | 'shield' | 'autoscaling' | 'cloudfront' | 'cloudwatc
 // CATALOG_ORDER = services.json array order = the PowerKind order above
 type Phase = 'ready' | 'playing' | 'dying' | 'levelClear' | 'gameOver';
 interface Mover { tile: Vec; dir: Dir; progress: number /* 0..255 */ }
-interface GameConfig { startLives: number /* default 3, 1..9 */; maze?: string[] /* tests only; overrides levelFor(L) for every level */ }
+interface GameConfig { startLives: number /* default 3, 1..9 */; maze?: readonly string[] /* tests only; overrides levelFor(L) for every level */ }
 interface Maze { w: number; h: number; cells: Tile[] /* row-major */; spawn: Vec; exit: Vec; pen: Vec[]; slots: Vec[]; pads: Vec[] } // all lists row-major (y, then x)
 type MazeError =
   | { kind: 'bad_size'; w: number; h: number } | { kind: 'bad_char'; x: number; y: number; ch: string }
@@ -88,7 +88,7 @@ Golden values (computed with Node 22): seed 0 → `1144304738, 1416247, 95894605
 
 **Tile + progress fixed-point movement.** This model keeps entities on a grid with integer state only, makes the wall invariant structural (movement only starts toward passable tiles), and gives smooth rendering through interpolation. Free x/y with AABB collision was rejected because it brings in floats and corner-snapping bugs.
 
-**Input handling (binding).** At the top of `step(state, dir)`, in every phase: if `dir !== 0` then `player.desired = dir`. `dir === 0` leaves `desired` unchanged, so releasing all keys keeps the player moving until it hits a wall (arcade style). The recorder starts with `last = 0`, so a game with no key presses has `inputLog = []`.
+**Input handling (binding).** At the top of `step(state, dir)`, right after `events = []`, in every phase except `gameOver`: if `dir !== 0` then `player.desired = dir`. `dir === 0` leaves `desired` unchanged, so releasing all keys keeps the player moving until it hits a wall (arcade style). The recorder starts with `last = 0`, so a game with no key presses has `inputLog = []`.
 
 **`step` order within `playing` (binding).**
 
@@ -110,7 +110,7 @@ Golden values (computed with Node 22): seed 0 → `1144304738, 1416247, 95894605
 (11) tick++
 ```
 
-**Non-playing steps (binding).** `events = []` runs first in every phase, `gameOver` included, followed by the input rule. If `phase === 'gameOver'`, the step only does `tick++` and returns. Otherwise `phaseTimer -= 1`; if it reaches 0 the transition happens in that same step (emitting its events, e.g. `gameOver` with reason `caught` when `dying` ends with 0 lives); then step (10); then `tick++`. The next step is the first step of the new phase. `tick` increments in every phase, so recorded ticks map to calls one-to-one, and every real game ends during the step at tick `MAX_TICKS - 1` or earlier.
+**Non-playing steps (binding).** `events = []` runs first in every phase, `gameOver` included. If `phase === 'gameOver'`, the step only does `tick++` and returns (the input rule is skipped, GE-7.3). Otherwise the input rule applies, then `phaseTimer -= 1`; if it reaches 0 the transition happens in that same step (emitting its events, e.g. `gameOver` with reason `caught` when `dying` ends with 0 lives); then step (10); then `tick++`. The next step is the first step of the new phase. `tick` increments in every phase, so recorded ticks map to calls one-to-one, and every real game ends during the step at tick `MAX_TICKS - 1` or earlier.
 
 **Initial state (binding).** `createGame` returns `phase = 'ready'`, `phaseTimer = 120`, `tick = 0`, `level = 1`, `lives = config.startLives`, `score = 0`, `events = []`, `lastKiller = null`, `gameOverReason = null`, `bugsEatenThisLevel = 0`, `nextPickupThreshold = 30`, `rng = createRng(seed >>> 0)`, with the reset table below applied. It throws `RangeError` if `startLives` is not an integer in 1..9 (programming error).
 

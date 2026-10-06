@@ -22,7 +22,7 @@ Commands (overview §4.4): `npm test`, `npm run test:unit`, `npm run test:pbt`, 
 
 ## Phase 0 — Apply design-review carry-forward fixes (spec text only, no code)
 
-- [ ] 0. Apply all 12 findings from `.agents/tasks/design-review.md` / `.json` to the spec files. Edit `.kiro/specs/_design-overview.md` and the per-feature spec files listed; then copy the overview over `.agents/tasks/design.md` so they stay byte-identical, and add a short "§13.2 Pass 3 → implementation" table to the overview listing #1–#12 as resolved.
+- [x] 0. Apply all 12 findings from `.agents/tasks/design-review.md` / `.json` to the spec files. Edit `.kiro/specs/_design-overview.md` and the per-feature spec files listed; then copy the overview over `.agents/tasks/design.md` so they stay byte-identical, and add a short "§13.2 Pass 3 → implementation" table to the overview listing #1–#12 as resolved.
       1. (MED) P5 re-pick oracle — overview §8 P5 and `game-engine/design.md` P5 row: replace "with re-pick, true through R+duration-1 and false after R+duration" with "`isActive` after step s is true iff `s ∈ [T, T+d-1] ∪ [R, R+d-1]`; without re-pick the second interval is empty" (also note it covers `R === T+d`). Align GE AC-10 wording if it restates the re-pick case.
       2. (MED) P1b round trip — overview §8 P1b and `coin-credit-system/design.md` P1b row: "Round trip (generated only when `screen === 'playing'`): `gameOver({score: 0, …, tainted: false}, qualifies: false)`, then 60 × `uiTick`, then `confirm` (incident → highscores), then `confirm` (highscores → attract). On any other screen the action is skipped."
       3. (MED) Reachability — overview §5.3, `game-engine/requirements.md` GE-2.3, `game-engine/design.md` core types + P2b: `validateMaze` also requires every `U` and `W` reachable from `P`; add `MazeError` variant `{ kind: 'unreachable_tile'; tile: 'U' | 'W'; x: number; y: number }` to the binding `MazeError` union; P2b adds "for every shipped level, `reachableFrom(maze, spawn)` includes `maze.exit`"; reword the P7 core "bounded because…" note to cite this rule; add "X must be reachable from P, and every U and W must be reachable from P" to the level-designer prompt in overview §9.4. Note P5_MAZE still satisfies the rule (its U/W lie in P's region; only X/pen are sealed).
@@ -40,38 +40,38 @@ Commands (overview §4.4): `npm test`, `npm run test:unit`, `npm run test:pbt`, 
 
 ## Phase 1 — Root scaffolding and game engine (game-engine spec tasks 1–16)
 
-- [ ] 1. Root scaffolding (GE task 1): `package.json` (`"type": "module"`, scripts from overview §4.4, exact devDependencies incl. MCP SDK + zod + @aws-sdk libs needed by root-run lambda tests), `.npmrc` (`save-exact=true`), `tsconfig.json` (§4.2 settings), `vite.config.ts`, `vitest.config.ts` (include globs from §4.3), `src/test-support/pbt.ts`, `tests/static/guard.test.ts` (S1 exactly per overview §8), `src/styles.css` + minimal `index.html` shell so `vite build` works (completed in item 15). Run `npm install`, commit `package-lock.json`.
+- [x] 1. Root scaffolding (GE task 1): `package.json` (`"type": "module"`, scripts from overview §4.4, exact devDependencies incl. MCP SDK + zod + @aws-sdk libs needed by root-run lambda tests), `.npmrc` (`save-exact=true`), `tsconfig.json` (§4.2 settings), `vite.config.ts`, `vitest.config.ts` (include globs from §4.3), `src/test-support/pbt.ts`, `tests/static/guard.test.ts` (S1 exactly per overview §8), `src/styles.css` + minimal `index.html` shell so `vite build` works (completed in item 15). Run `npm install`, commit `package-lock.json`.
       Files: `package.json`, `.npmrc`, `tsconfig.json`, `vite.config.ts`, `vitest.config.ts`, `src/test-support/pbt.ts`, `tests/static/guard.test.ts`, `index.html`, `src/styles.css`.
       Verify: `npm test` (guard passes) and `npm run typecheck` exit 0.
 
-- [ ] 2. `src/engine/rng.ts` (pinned mulberry32, `pick` per fix #9) + `rng.test.ts` with golden values for seeds 0 and 1 (GE task 2).
+- [x] 2. `src/engine/rng.ts` (pinned mulberry32, `pick` per fix #9) + `rng.test.ts` with golden values for seeds 0 and 1 (GE task 2).
       Verify: `npx vitest --run src/engine/rng` passes.
 
-- [ ] 3. `types.ts`, `constants.ts` (`difficulty(level)`, `ENEMY_ORDER`, `MAX_TICKS`, `TILE_UNITS`), `input.ts` (recorder, `reverse`, `DIR_ORDER`) + tests (GE task 3).
+- [x] 3. `types.ts`, `constants.ts` (`difficulty(level)`, `ENEMY_ORDER`, `MAX_TICKS`, `TILE_UNITS`), `input.ts` (recorder, `reverse`, `DIR_ORDER`) + tests (GE task 3).
       Verify: `npx vitest --run src/engine` passes; `npm run typecheck` 0.
 
-- [ ] 4. `src/content/services.json` (CATALOG_ORDER schema, §5.7) with load-time validation; `src/engine/maze.ts` (`parseMaze`, `validateMaze` incl. `unreachable_tile` from fix #3, `isPassable`, `reachableFrom`, BFS helpers) + one unit test per `MazeError` kind (GE task 4).
+- [x] 4. `src/content/services.json` (CATALOG_ORDER schema, §5.7) with load-time validation; `src/engine/maze.ts` (`parseMaze`, `validateMaze` incl. `unreachable_tile` from fix #3, `isPassable`, `reachableFrom`, BFS helpers) + one unit test per `MazeError` kind (GE task 4).
       Verify: `npx vitest --run src/engine/maze` passes.
 
-- [ ] 5. `src/engine/levels.ts`: three original 40x28 server-rack layouts HALL-A "us-east-3am", HALL-B "cold aisle", HALL-C "hot aisle" meeting §5.3 counts and fix #3 reachability (GE task 5), then P2a/P2b in `maze.property.test.ts` incl. the exit-reachable assertion (GE task 6). Layouts must be original (not any commercial maze; different dimensions already help).
+- [x] 5. `src/engine/levels.ts`: three original 40x28 server-rack layouts HALL-A "us-east-3am", HALL-B "cold aisle", HALL-C "hot aisle" meeting §5.3 counts and fix #3 reachability (GE task 5), then P2a/P2b in `maze.property.test.ts` incl. the exit-reachable assertion (GE task 6). Layouts must be original (not any commercial maze; different dimensions already help).
       Verify: `npx vitest --run src/engine/maze` (unit + property) passes.
 
-- [ ] 6. `movement.ts` (fixed-point advance, buffered turns, reversal-before-advance, leftover rule) + edge-case tests (GE task 7).
+- [x] 6. `movement.ts` (fixed-point advance, buffered turns, reversal-before-advance, leftover rule) + edge-case tests (GE task 7).
       Verify: `npx vitest --run src/engine/movement` passes.
 
-- [ ] 7. Enemies under `src/engine/enemies/` (`pathing.ts`, `latency.ts`, `throttle.ts`, `coldStart.ts`, `outage.ts`, `index.ts`) with release rule per fix #5, `isDark`, targets; a unit test per AI showing its distinct behavior (GE task 8).
+- [x] 7. Enemies under `src/engine/enemies/` (`pathing.ts`, `latency.ts`, `throttle.ts`, `coldStart.ts`, `outage.ts`, `index.ts`) with release rule per fix #5, `isDark`, targets; a unit test per AI showing its distinct behavior (GE task 8).
       Verify: `npx vitest --run src/engine/enemies` passes.
 
-- [ ] 8. `powerups.ts` (`tickPowerUps`, `maybeSpawnPickup`, `applyPowerUp` per fix #6, `isActive`, clone eating at `occ(clone)` per fix #8, Shield, binding warp check) + unit tests per effect, timer boundary, Lambda+CloudFront leftover warp (GE task 9).
+- [x] 8. `powerups.ts` (`tickPowerUps`, `maybeSpawnPickup`, `applyPowerUp` per fix #6, `isActive`, clone eating at `occ(clone)` per fix #8, Shield, binding warp check) + unit tests per effect, timer boundary, Lambda+CloudFront leftover warp (GE task 9).
       Verify: `npx vitest --run src/engine/powerups` passes.
 
-- [ ] 9. `collision.ts`, `scoring.ts`, `game.ts` (`createGame`, `step` with binding 11-phase order, phase timers, reset table, level-clear clear per fix #12, time limit + `gameOverReason`, `forceGameOver`, `cloneState`), `src/engine/index.ts` barrel + unit tests (GE task 10).
+- [x] 9. `collision.ts`, `scoring.ts`, `game.ts` (`createGame`, `step` with binding 11-phase order, phase timers, reset table, level-clear clear per fix #12, time limit + `gameOverReason`, `forceGameOver`, `cloneState`), `src/engine/index.ts` barrel + unit tests (GE task 10).
       Verify: `npx vitest --run src/engine` passes; `npm run typecheck` 0.
 
-- [ ] 10. `src/engine/test-fixtures.ts` (`P5_MAZE`, walled-off maze, warp maze) + validity test; P3 (two `fc.assert`s per fix #4) and `movement.coverage.test.ts` (GE task 11); P5 with the corrected oracle (fix #1) (GE task 12). Pin and confirm the seed `0x4b49524f` hits all three coverage counters; if it does not, choose another seed that does and update the spec text.
+- [x] 10. `src/engine/test-fixtures.ts` (`P5_MAZE`, walled-off maze, warp maze) + validity test; P3 (two `fc.assert`s per fix #4) and `movement.coverage.test.ts` (GE task 11); P5 with the corrected oracle (fix #1) (GE task 12). Pin and confirm the seed `0x4b49524f` hits all three coverage counters; if it does not, choose another seed that does and update the spec text.
       Verify: `npm run test:pbt` passes P2a/P2b/P3/P5.
 
-- [ ] 11. `src/shared/replay.ts` (pinned loop §5.9, `replay`, `validateReplay`) + unit tests incl. golden regression and the tick-107999 case (GE task 13); P4 `determinism.property.test.ts` (GE task 14); perf test < 1.5 s for 108000 ticks (GE task 15). Then GE task 16.
+- [x] 11. `src/shared/replay.ts` (pinned loop §5.9, `replay`, `validateReplay`) + unit tests incl. golden regression and the tick-107999 case (GE task 13); P4 `determinism.property.test.ts` (GE task 14); perf test < 1.5 s for 108000 ticks (GE task 15). Then GE task 16.
       Verify: `npm test` and `npm run typecheck` exit 0; perf test logs the measured time.
 
 ## Phase 2 — Pure cabinet, content, leaderboard logic

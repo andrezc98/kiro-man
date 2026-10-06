@@ -1,0 +1,7 @@
+[
+  { "kind": "lambda", "label": "LMB", "name": "AWS Lambda", "durationTicks": 360, "color": 9, "effect": "Player speed 48" },
+  { "kind": "shield", "label": "SHD", "name": "AWS Shield", "durationTicks": 600, "color": 12, "effect": "Absorbs the next enemy hit: enemy back to the pen, +200, 30 ticks invulnerable" },
+  { "kind": "autoscaling", "label": "ASG", "name": "Amazon EC2 Auto Scaling", "durationTicks": 300, "color": 11, "effect": "Spawns a clone that hunts the nearest bug and eats bugs for +10 each" },
+  { "kind": "cloudfront", "label": "CDN", "name": "Amazon CloudFront", "durationTicks": 480, "color": 14, "effect": "The four edge pads warp the player to the next pad" },
+  { "kind": "cloudwatch", "label": "CWT", "name": "Amazon CloudWatch", "durationTicks": 480, "color": 10, "effect": "Shows every enemy's target tile" }
+]

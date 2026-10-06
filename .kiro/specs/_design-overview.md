@@ -154,7 +154,7 @@ Test files sit next to their sources: `*.test.ts` for unit tests and `*.property
 - API: `createGame(seed: number, config?: Partial<GameConfig>): GameState` and `step(state: GameState, input: Dir): void`. `step` mutates the caller-owned state in place for replay speed. There are no module-level mutable variables. `cloneState` uses `structuredClone`, which is available in Node 22 and browsers and is not on the forbidden list.
 - Events: the first thing `step` does, in every phase including `gameOver`, is `state.events = []`; the step then refills it (`bug`, `powerUpSpawn`, `powerUpPickup`, `shieldBlock`, `death`, `levelClear`, `gameOver`, `cloneSpawn`, `warp`). Render and audio consume these and never feed anything back. Events are for SFX and visuals only. Game-over detection in the app is phase-based, not event-based (section 6).
 - Initial state (binding): `createGame` returns `phase = 'ready'`, `phaseTimer = 120`, `tick = 0`, `level = 1`, `lives = config.startLives`, `score = 0`, `events = []`, with the reset table (5.6) applied. `createGame` throws `RangeError` if `startLives` is not an integer in 1..9 (programming error).
-- Non-playing steps (binding): `events = []`; apply the input rule (5.2); if `phase === 'gameOver'`, only `tick++` and return. Otherwise `phaseTimer -= 1`; if it reaches 0 the transition happens in that same step (and emits its events); then the time-limit check (5.8 step 10); then `tick++`. The next step is the first step of the new phase.
+- Non-playing steps (binding): `events = []`; if `phase === 'gameOver'`, only `tick++` and return (the input rule is skipped there, so a `gameOver` step changes nothing else, GE-7.3); otherwise apply the input rule (5.2). Otherwise `phaseTimer -= 1`; if it reaches 0 the transition happens in that same step (and emits its events); then the time-limit check (5.8 step 10); then `tick++`. The next step is the first step of the new phase.
 
 ### 5.2 Input model
 
@@ -274,6 +274,8 @@ export function replay(seed: number, log: InputLog, opts: ReplayOpts = {}): Repl
 export function validateReplay(sub: { seed: number; inputLog: InputLog; claimedScore: number }, opts: ReplayOpts = {}):
   { ok: true; score: number; level: number } | { ok: false; reason: 'replay_incomplete' | 'replay_mismatch'; replayedScore: number };
 ```
+
+`ReplayOpts` also has a tests-only `maze?: readonly string[]`, passed through as `GameConfig.maze` (so the pinned `createGame` call receives `{ startLives?, maze? }`); the walled-off time-limit cases and the perf test use it, and the Lambda and MCP server never set it.
 
 `MAX_TICKS = 108000` (30 simulated minutes). The engine ends the game during the step at `tick === MAX_TICKS - 1`, after which `tick === MAX_TICKS`, so an honest replay with the default `maxTicks` is always `complete`. `timeout` only happens with a smaller test `maxTicks`. An event recorded at tick 107999 is applied before that final step and counts. Log events whose tick is ≥ the final `state.tick` are never reached and therefore have no effect. Because ticks strictly increase (enforced by `parseSubmission`), the `log[i][0] === s.tick` rule never skips a reachable event. `validateReplay` calls `replay(sub.seed, sub.inputLog, opts)` and accepts if and only if `status === 'complete'` and `score === claimedScore`; otherwise `replay_incomplete` (status `timeout`) takes precedence over `replay_mismatch`.
 
