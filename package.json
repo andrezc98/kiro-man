@@ -1,0 +1,32 @@
+{
+  "name": "kiro-man",
+  "version": "1.0.0",
+  "private": true,
+  "description": "KIRO-MAN: Outage in the Data Center. A deterministic retro arcade maze-chase game with AWS-service power-ups and server-side replay validation.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --port 4173 --strictPort",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest --run",
+    "test:unit": "vitest --run --exclude \"**/*.property.test.ts\"",
+    "test:pbt": "vitest --run property",
+    "build:mcp": "npm --prefix mcp/arcade-operator run build",
+    "synth": "npm --prefix infra run synth",
+    "cfn-lint": "bash scripts/cfn-lint.sh",
+    "verify:browser": "npm run build && node scripts/screenshots.mjs"
+  },
+  "devDependencies": {
+    "@aws-sdk/client-dynamodb": "3.1146.0",
+    "@aws-sdk/lib-dynamodb": "3.1146.0",
+    "@modelcontextprotocol/sdk": "1.32.1",
+    "@types/node": "22.20.5",
+    "fast-check": "4.10.2",
+    "playwright": "1.63.0",
+    "typescript": "5.9.3",
+    "vite": "8.3.2",
+    "vitest": "5.0.3",
+    "zod": "4.6.5"
+  }
+}

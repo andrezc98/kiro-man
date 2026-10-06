@@ -1,0 +1,47 @@
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: #000000;
+  color: #c2c3c7;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+}
+
+#cabinet {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+#screen {
+  position: relative;
+  line-height: 0;
+}
+
+#game {
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  background: #000000;
+}
+
+#controls {
+  margin: 0;
+  font-size: 14px;
+  text-align: center;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
